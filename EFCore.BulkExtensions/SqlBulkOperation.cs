@@ -1175,13 +1175,14 @@ namespace EFCore.BulkExtensions
                             command.Parameters.Add(parameter);
                         }
 
-                        if (ownedProperty == null)
+                        var ownedPropertyValue = tableInfo.FastPropertyDict[ownedPropertyName].Get(entity);
+
+                        if (ownedPropertyValue == null)
                         {
                             value = null;
                         }
                         else
                         {
-                            var ownedPropertyValue = tableInfo.FastPropertyDict[ownedPropertyName].Get(entity);
                             var subPropertyFullName = $"{ownedPropertyName}_{subPropertyName}";
                             value = tableInfo.FastPropertyDict[subPropertyFullName].Get(ownedPropertyValue);
                         }
