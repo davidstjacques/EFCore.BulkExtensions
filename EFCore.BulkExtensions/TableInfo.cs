@@ -515,7 +515,7 @@ namespace EFCore.BulkExtensions
             StringBuilder result = new StringBuilder(1024);
             foreach (var propertyName in propertiesNames)
             {
-                result.Append(fastPropertyDict[propertyName].Get(entity).ToString());
+                result.Append(fastPropertyDict[propertyName].Get(entity));
             }
             return result.ToString();
         }
