@@ -1063,16 +1063,23 @@ namespace EFCore.BulkExtensions
                         foreach (var ownedProperty in ownedProperties)
                         {
                             var columnName = $"{property.Name}_{ownedProperty.Name}";
-                            var ownedPropertyValue = tableInfo.FastPropertyDict[columnName].Get(propertyValue);
-
-                            if (tableInfo.ConvertibleProperties.ContainsKey(columnName))
+                            if (propertyValue == null)
                             {
-                                var converter = tableInfo.ConvertibleProperties[columnName];
-                                columnsDict[columnName] = propertyValue == null ? null : converter.ConvertToProvider.Invoke(ownedPropertyValue);
+                                columnsDict[columnName] = null;
                             }
                             else
                             {
-                                columnsDict[columnName] = propertyValue == null ? null : ownedPropertyValue;
+                                var ownedPropertyValue = tableInfo.FastPropertyDict[columnName].Get(propertyValue);
+
+                                if (tableInfo.ConvertibleProperties.ContainsKey(columnName))
+                                {
+                                    var converter = tableInfo.ConvertibleProperties[columnName];
+                                    columnsDict[columnName] = converter.ConvertToProvider.Invoke(ownedPropertyValue);
+                                }
+                                else
+                                {
+                                    columnsDict[columnName] = ownedPropertyValue;
+                                }
                             }
                         }
                     }
